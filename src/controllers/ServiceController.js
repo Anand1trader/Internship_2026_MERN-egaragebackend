@@ -1,9 +1,13 @@
 const Service = require("../models/ServiceModel");
-
-// ✅ CREATE (agar chaho future me add karna ho)
+const uploadToCloudinary = require("../utils/CloudinaryUtil")
+// ✅ CREATE
 const createService = async (req, res) => {
   try {
-    const service = await Service.create(req.body);
+    //console.log("file....", req.file);
+    //const service = await Service.create({...req.body,imagePath:req.file.path});
+    const cloudinaryresponse = await uploadToCloudinary(req.file.path)
+    const service = await Service.create({...req.body,imagePath:cloudinaryresponse.secure_url});
+    console.log("Cloudinary response:", cloudinaryresponse);
     res.status(201).json({ message: "Service created ✅", data: service });
   } catch (err) {
     res.status(500).json({ message: "Error creating service ❌", error: err.message });

@@ -5,6 +5,7 @@ const serviceSchema = new mongoose.Schema({
   description: { type: String, required: true },
   price: { type: Number, required: true },
   duration: { type: String }, // e.g., "2 hours"
+  imagePath: { type: String }, // Store the path of the uploaded image
 });
 
 module.exports = mongoose.model("Service", serviceSchema);
