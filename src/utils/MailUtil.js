@@ -1,30 +1,32 @@
 const nodemailer = require("nodemailer");
+require("dotenv").config();
 
 const sendEmail = async (to, subject, html) => {
   try {
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "anandtalpada268@gmail.com",
-        pass: "uqtm ycon mxla tich",
+        user: process.env.EMAIL_USER,   // ✅ correct
+        pass: process.env.EMAIL_PASS,   // ✅ correct
       },
     });
 
-    // 🔥 check connection
+    // 🔥 Check connection
     await transporter.verify();
-    console.log("SMTP Server Ready ✅");
+    console.log("✅ SMTP Ready");
 
     const info = await transporter.sendMail({
-      from: `"eGarage" <anandtalpada268@gmail.com>`,
+      from: `"eGarage" <${process.env.EMAIL_USER}>`, // ✅ FIXED
       to,
       subject,
       html,
     });
 
-    console.log("Email sent:", info.response);
+    console.log("✅ Email sent:", info.response);
 
   } catch (error) {
-    console.log("Email error ❌:", error);
+    console.log("❌ Email error:", error.message);
+    throw error;
   }
 };
 

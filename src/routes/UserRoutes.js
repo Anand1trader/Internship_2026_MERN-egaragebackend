@@ -1,8 +1,19 @@
-const router = require("express").Router()
-const userController = require("../controllers/UserController")
+const router = require("express").Router();
 
-// POST: register user
-router.post("/register", userController.registerUser)
-router.post("/login", userController.loginUser);
+// 🔥 ALL CONTROLLERS IMPORT KARO
+const {
+  loginUser,
+  registerUser,
+  forgotPassword,
+  resetPassword
+} = require("../controllers/UserController");
 
-module.exports = router
+// ✅ ROUTES
+router.post("/login", loginUser);
+router.post("/register", registerUser);
+
+// 🔥 NEW ROUTES (FIXED)
+router.post("/forgot-password", forgotPassword);
+router.post("/reset-password/:token", resetPassword);
+
+module.exports = router;
