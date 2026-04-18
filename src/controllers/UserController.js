@@ -1,4 +1,5 @@
 const User = require("../models/UserModel");
+const Booking = require("../models/BookingModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const sendEmail = require("../utils/MailUtil");
@@ -182,9 +183,52 @@ const resetPassword = async (req, res) => {
   }
 };
 
+// ✅ DASHBOARD (NEW ADD)
+const getUserDashboard = async (req, res) => {
+  try {
+    console.log("USER:", req.user);
+
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({
+        message: "User not found in token ❌",
+      });
+    }
+
+    const userId = req.user.id;
+
+    const bookings = await Booking.find({ user: userId }).sort({ createdAt: -1 });
+
+    const totalBookings = bookings.length;
+    const activeServices = bookings.filter(b => b.status === "Pending").length;
+    const completedServices = bookings.filter(b => b.status === "Completed").length;
+
+    res.json({
+      user: {
+        id: req.user.id,
+        name: req.user.name,
+        email: req.user.email,
+      },
+      bookings,
+      stats: {
+        totalBookings,
+        activeServices,
+        completedServices
+      }
+    });
+
+  } catch (err) {
+    console.error("Dashboard ERROR:", err.message);
+    res.status(500).json({
+      message: "Dashboard error ❌",
+      error: err.message,
+    });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
   forgotPassword,
   resetPassword,
+  getUserDashboard
 };

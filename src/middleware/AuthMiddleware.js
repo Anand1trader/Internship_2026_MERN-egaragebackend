@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
-const secret = "secretkey"; // ✅ SAME as login
+const secret = "secretkey";
 
 const validateToken = async (req, res, next) => {
   try {
@@ -20,12 +20,17 @@ const validateToken = async (req, res, next) => {
 
     const token = authHeader.split(" ")[1];
 
+    if (!token) {
+      return res.status(401).json({
+        message: "Token missing ❌",
+      });
+    }
+
     const decoded = jwt.verify(token, secret);
 
     req.user = decoded;
 
     next();
-
   } catch (err) {
     res.status(401).json({
       message: "Invalid or expired token ❌",

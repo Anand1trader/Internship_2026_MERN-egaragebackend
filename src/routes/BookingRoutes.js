@@ -1,8 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const bookingController = require("../controllers/BookingController");
+const validateToken = require("../middleware/AuthMiddleware");
 
-router.post("/", bookingController.createBooking);
+router.post("/", validateToken, bookingController.createBooking);
+
 router.get("/", bookingController.getAllBookings);
 router.put("/:id", bookingController.updateBooking);
 router.delete("/:id", bookingController.deleteBooking);

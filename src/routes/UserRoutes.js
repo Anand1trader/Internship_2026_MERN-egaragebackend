@@ -1,19 +1,24 @@
 const router = require("express").Router();
 
-// 🔥 ALL CONTROLLERS IMPORT KARO
 const {
   loginUser,
   registerUser,
   forgotPassword,
-  resetPassword
+  resetPassword,
+  getUserDashboard
 } = require("../controllers/UserController");
 
-// ✅ ROUTES
+const validateToken = require("../middleware/AuthMiddleware");
+
+// ✅ AUTH ROUTES
 router.post("/login", loginUser);
 router.post("/register", registerUser);
 
-// 🔥 NEW ROUTES (FIXED)
+// ✅ PASSWORD ROUTES
 router.post("/forgot-password", forgotPassword);
 router.post("/reset-password/:token", resetPassword);
+
+// ✅ DASHBOARD ROUTE (NEW)
+router.get("/dashboard", validateToken, getUserDashboard);
 
 module.exports = router;
