@@ -1,30 +1,36 @@
-require("dotenv").config()
-const express = require('express')
-const app = express()
-const cors = require("cors")
+require("dotenv").config();
 
-app.use(cors())
-app.use(express.json())
+const express = require("express");
+const cors = require("cors");
 
+const app = express();
 
-const DBConnection = require("./src/utils/DBConnection")
-DBConnection()
+app.use(cors());
+app.use(express.json());
 
-const userRouter = require('./src/routes/UserRoutes')
-app.use("/user", userRouter)
+// ✅ DATABASE
+const DBConnection = require("./src/utils/DBConnection");
+DBConnection();
+
+// ✅ ROUTES
+const userRouter = require("./src/routes/UserRoutes");
 const garageRouter = require("./src/routes/GarageRoutes");
-app.use("/garage", garageRouter);
 const bookingRouter = require("./src/routes/BookingRoutes");
-app.use("/booking", bookingRouter);
 const paymentRouter = require("./src/routes/PaymentRoutes");
-app.use("/payment", paymentRouter);
 const serviceRouter = require("./src/routes/ServiceRoutes");
+const adminRoutes = require("./src/routes/AdminRoutes");
 
+// ✅ API ROUTES
+app.use("/user", userRouter);
+app.use("/garage", garageRouter);
+app.use("/booking", bookingRouter);
+app.use("/payment", paymentRouter);
 app.use("/service", serviceRouter);
+app.use("/admin", adminRoutes);
 
-
-const PORT = process.env.PORT || 3000
+// ✅ PORT
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`)
-})
+  console.log(`Server running on port ${PORT} 🚀`);
+});

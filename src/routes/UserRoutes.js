@@ -1,24 +1,28 @@
 const router = require("express").Router();
 
 const {
-  loginUser,
   registerUser,
+  loginUser,
   forgotPassword,
   resetPassword,
-  getUserDashboard
+  getUserDashboard,
 } = require("../controllers/UserController");
 
 const validateToken = require("../middleware/AuthMiddleware");
 
-// ✅ AUTH ROUTES
-router.post("/login", loginUser);
+// ✅ REGISTER
 router.post("/register", registerUser);
 
-// ✅ PASSWORD ROUTES
+// ✅ LOGIN
+router.post("/login", loginUser);
+
+// ✅ FORGOT PASSWORD
 router.post("/forgot-password", forgotPassword);
+
+// ✅ RESET PASSWORD
 router.post("/reset-password/:token", resetPassword);
 
-// ✅ DASHBOARD ROUTE (NEW)
+// ✅ USER DASHBOARD
 router.get("/dashboard", validateToken, getUserDashboard);
 
 module.exports = router;
